@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import NavBar from '../NavBar/NavBar.jsx';
 import styles from './LandingPage.module.css';
 import InfoPlanes from '../InfoPlans/InfoPlanes.jsx';
 import ContactForm from '../ContactForm/ContactForm.jsx';

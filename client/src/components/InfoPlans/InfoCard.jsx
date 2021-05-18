@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 
 export default function InfoCard({ plan }) {
     const classes = useStyles();
-    console.log(plan);
+    // console.log(plan);
     return (
         <Card className={classes.root}>
             <CardMedia

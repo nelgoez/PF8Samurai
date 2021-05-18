@@ -30,7 +30,7 @@ function Login({ firebase }) {
         window.location = `/${userData.dni}/medic`;
 
     if (userData && userData.role === 'affiliate' && userFire.data)
-        window.location = `/${userData.dni}/affiliate`;
+        window.location = `/affiliate/${userData.dni}`;
 
     const handleChange = (event) => {
         const value = event.target.value;

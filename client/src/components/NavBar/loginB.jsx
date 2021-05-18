@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from '../NavBar/navBar.module.css';
+import styles from '../NavBar/NavBar.module.css';
 
 const Logb = () => {
     return (

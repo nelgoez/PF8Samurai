@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import LandingPage from './LandingPage/LandingPage';
-import NavBar from './NavBar/navBar.jsx';
+import NavBar from './NavBar/NavBar.jsx';
 import Footer from './Footer/Footer.jsx';
 import { useFirebaseApp } from 'reactfire';
 import Login from './Login/Login.jsx';
@@ -57,34 +57,25 @@ function App() {
                 render={() => <AdminPlans firebase={firebase} />}
             />
             <Route exact path='/NewPlanP' component={NewPlanP} />
+
             <Route
-                path='/:id/affiliate'
-                render={() => <UserNav firebase={firebase} />}
-            />
-            <Route
-                exact
-                path='/:id/affiliate'
+                path='/affiliate'
                 render={() => <UserHome firebase={firebase} />}
             />
             <Route
                 exact
-                path='/:id/affiliate/familymembers'
+                path='/affiliate/familymembers/:id'
                 component={FamilyMembers}
             />
             <Route
                 exact
-                path='/:id/affiliate/mymedicalrecords'
+                path='/affiliate/mymedicalrecords/:id'
                 component={UserMedRec}
             />
             <Route
                 exact
                 path='/:id/mymedicalrecords/pdf'
                 render={() => <RenderPDF firebase={firebase} />}
-            />
-            <Route
-                exact
-                path='/:id/affiliate/profile'
-                render={() => <UserProfile firebase={firebase} />}
             />
             <Route exact path='/asociate' component={ContactForm} />
             <Route
@@ -97,9 +88,8 @@ function App() {
                 path='/:id/admin/newadmin'
                 render={() => <AdminRegistration firebase={firebase} />}
             />
-            <Route exact path='/' component={Footer} />
             <Route exact path='/plandetails' component={ComparativaP} />
-            <Route path='/' component={Footer} />
+            <Route exact path='/' component={Footer} />
         </>
     );
 }
