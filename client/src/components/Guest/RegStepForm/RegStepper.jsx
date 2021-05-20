@@ -10,7 +10,7 @@ import DatosSalud from './DatosSalud';
 import DatosFamiliares from './DatosFamiliares';
 import DatosEmpresa from "./DatosEmpresa"
 import DatosRevision from './DatosRevision';
-import supabase from "../../supabase.config";
+import supabase from "../../../supabase.config";
 
 const useStyles = makeStyles((theme) => ({
   root: {

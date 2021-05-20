@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getStates, getLocalities } from "../../actions/getter.action";
+import { getStates, getLocalities } from "../../../actions/getter.action";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import styles from "./DatosTitular.module.css";
 import validator from "./Validator";
+import useQuery from "../../../hooks/querys";
 
 const DatosTitular = () => {
   const allStates = useSelector((state) => state.plans.allStates);
   const allLocalities = useSelector((state) => state.plans.allLocalities);
   const dispatch = useDispatch();
-  //---CODIGO SEBA
   const [textInputs, setTextInputs] = useState({
     first_name: "",
     last_name: "",
@@ -65,9 +65,29 @@ const DatosTitular = () => {
     },
     emailErrors: { email: "" },
   });
-
+  let laquerypapa ={
+  name : useQuery().get("first_name"),
+  email: useQuery().get("email"),
+  dni: useQuery().get("dni"),
+  phone: useQuery().get("phone_number")
+  }
   useEffect(() => {
-    let datosTitular = JSON.parse(localStorage.getItem("datosTitular"));
+    const datosTitular = JSON.parse(localStorage.getItem("datosTitular"));
+   
+    if(laquerypapa){
+      setTextInputs(
+        {...textInputs,
+        first_name: laquerypapa.name}
+      )
+      setInputsTextNum(
+        {...textInputsMix,
+          dni: laquerypapa.dni,
+          phone_number: laquerypapa.phone_number
+      })
+      setEmailInputs({
+        email: laquerypapa.email
+      })
+    }
     if (datosTitular) {
       setTextInputs({
         first_name: datosTitular.first_name,
@@ -123,7 +143,6 @@ const DatosTitular = () => {
         ...errors,
         textMixErrors: validator(
           {
-            apartment: datosTitular.apartment,
             street_name: datosTitular.street_name,
           },
           "mix"
@@ -513,11 +532,7 @@ const DatosTitular = () => {
             autoComplete="off"
             value={textInputsMix.apartment}
             variant="outlined"
-            onChange={(e) => handleTextMixChange(e)}
-            {...(errors.textMixErrors.apartment && {
-              error: !!errors.textMixErrors.apartment,
-              helperText: "Piso/Depto invalido",
-            })}
+            onChange={(e) => setInputsTextMix({ ...textInputsMix, [e.target.name]: e.target.value })}
             onBlur={saveInLocalStorage}
           />
         </div>
