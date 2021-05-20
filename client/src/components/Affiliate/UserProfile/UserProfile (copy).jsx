@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import supabase from '../../../supabase.config';
 import './UserProfile.css';
-import Swal from 'sweetalert2';
 import { Autocomplete } from '@material-ui/lab';
 import { Button, TextField } from '@material-ui/core';
 
@@ -115,7 +114,51 @@ export default function UserProfile() {
     }
   }
 
+  //----------------------------------------------------
+  function handlesubmit() {
+    // Guardar datos en supabase !!!!!
 
+    if (validate()) {
+
+      //Update partners table (si modifico email o teléfono)
+      let modifyPartnersT = async (user, modInfo) => {
+        let { data, error } = await supabase
+          .from('partners')
+          .update({
+            phone_number: modInfo.phone_number,
+            email: modInfo.email
+          })
+          .eq('dni', user.dni)
+      }
+
+      //Update address table (si modifico dirección o localidad)
+      let modifyAddressT = async (user, modInfo) => {
+        let { data, error } = await supabase
+          .from('address')
+          .update({
+            street: modInfo.street,
+            street_number: modInfo.street_number,
+            floor: modInfo.floor,
+            department: modInfo.department,
+            locality_id: modInfo.locality_id, // <---OJO Cómo lo hago!!!!
+          })
+          .eq('partner_dni', user.dni)
+      }
+
+      alert('Guardó')
+      setModify(false)
+      // limpia inputs de datos a modificar
+      // setModInfo({
+      //   address: '',
+      //   phone: '',
+      //   email: '',
+      //   state: '',
+      //   locality: '',
+      //   postal_code: ''
+      // })
+    }
+  }
+  //----------------------------------------------------
 
   // Provincias a mostrar en el selector.
   let [allstates, setAllstates] = useState(null);
@@ -126,9 +169,9 @@ export default function UserProfile() {
     try {
       let { data: states } = await supabase
         .from("states")
-        .select("id , name");
+        .select("name");
 
-      setAllstates(states.map(e => ({state_id: e.id, state_name: e.name})));
+      setAllstates(states.map(e => e.name));
     } catch (err) {
       console.error(err);
     }
@@ -234,17 +277,12 @@ export default function UserProfile() {
 		  case 'state':
         // Si cambio la provincia tengo que sacar el código postal 
         // id de provincia y la localidad que estaba por defecto.
-        console.log('modificaste a',e.target.value);
-        function findStateId(provincia,allstates) {
-          let idfound = allstates.filter(state => state.state_name === provincia)[0].state_id;
-          return idfound;
-        }
 		    setModInfo({
           ...modInfo,
-          state: e.target.value ,
+          [e.target.name]: e.target.value ,
           locality_id: '',
           locality: '',
-          state_id: findStateId( e.target.value,allstates),
+          state_id: '',
           postal_code: '',
         });
 		    break;
@@ -259,41 +297,49 @@ export default function UserProfile() {
         }
     };
   
-  // Cuando cambio una localidad setea el error, modifica 
-  // el estado (modInfo) en donde se guarda y el código postal.
+  // Cuando cambio una localidad setea el error y modifica 
+  // el estado (modInfo) en donde se guarda .
   let handlechange2 = (e, value) => {
-    console.log('seleccionaste', value,modInfo);
+    console.log('seleccionaste', value);
+
+    getInfoLocality(value);
+
 
     // Que no sea string vacío
     let cityregex = /[\S]/ ;
 
     setError(error => (
-    	{...error, locality: (cityregex).test(value) ? '' : 'No puede quedar incompleto.' }
+    	{...error, [e.target.name]: (cityregex).test(e.target.value) ? '' : 'No puede quedar incompleto.' }
     ));
 
-    async function setInfoLocality(city,modInfo) {
+    async function getInfoLocality(city) {
       try {
         let { data: infolocality } = await supabase
           .from("localities")
-          .select("id_locality,name,postal_code")
-          .eq('state_id', modInfo.state_id)
+          .select("id_locality,name,postal_code,state_id")
+          .eq('name', city)
           .eq('name', city);
 
-        console.log(infolocality[0]);
-
-        setModInfo({
-          ...modInfo, 
-          locality: infolocality[0].name, 
-          locality_id: infolocality[0].id_locality, 
-          postal_code: infolocality[0].postal_code
-          })
+        console.log(infolocality);
+        // set
+  
+        // setAllstates(states.map(e => e.name));
       } catch (err) {
         console.error(err);
       }
       return;
     }
+    
+    //      state_id: value.state_id,
 
-    setInfoLocality(value,modInfo);
+    setModInfo({
+      ...modInfo, 
+      locality_id: value.id, 
+      locality: value, 
+      postal_code: value.postal_code
+      })
+    // agregar locality
+    // ver showcities
   }
 
   let validate = (modInfo) => {
@@ -304,7 +350,6 @@ export default function UserProfile() {
   // Cada vez que se modifica modInfo renderiza.
   useEffect(() => {
     if (modInfo) {
-      console.log(modInfo);
     }
   }, [modInfo, error]);
 
@@ -312,32 +357,52 @@ export default function UserProfile() {
   // Ciudades a cargar en el selector.
   let [showCities, setShowCities] = useState(null);
 
-  // Función que filtra las ciudades según la provincia ingresada
-    async function getCities(idprovincia,modInfo) { //modInfo.state_id
-      try {
-        let { data: infolocality } = await supabase
-          .from("localities")
-          .select("id_locality,name,postal_code")
-          .eq('state_id', idprovincia )
+  // let [filtro, setFiltro] = useState(null);
 
-        console.log(infolocality);
-        setShowCities(infolocality.map(e => e.name));
-        // setAllstates(states.map(e => e.name));
-      } catch (err) {
-        console.error(err);
+  // Función que filtra las ciudades según la provincia ingresada
+  // y el filtro de búsqueda.
+  // async function getCity(provincia, filtro) {
+  async function getCity(provincia) {
+    try {
+      // busca id de la provincia
+      let { data: state } = await supabase
+        .from("states")
+        .select("id,name")
+        .eq('name', provincia)
+      let sid = state[0].id;
+
+      console.log(sid)
+
+      try {
+        // guarda en cities las ciudades de esa provincia
+        let { data: cities } = await supabase
+          .from('localities')
+          .select(`id, name, postal_code,states(id,name)`)
+          .eq('state_id', sid)
+
+        console.log(cities);
+        console.log(cities[0]);
+        let namecities = cities.map(e => e.name)
+        // guarda en showCities las ciudades a mostrar en el selector
+
+        setShowCities(namecities);
+        //return??
+
+      } catch (err2) {
+        console.log(err2);
       }
-      return;
+
+    } catch (err) {
+      console.log(err);
     }
-  
-  // Cuando actualiza la provincia cambia las ciudades a mostrar
+  }
+
   useEffect(async () => {
-    if(modInfo){
     // let filtro = 'Villa';
     // await getCity('Cordoba', filtro)
-    await getCities(modInfo.state_id)
-    console.log('toy acá',modInfo)
-    }
-  }, [modInfo])
+    await getCity('Cordoba')
+    console.log('toy acá')
+  }, [])
 
   useEffect(() => {
     if (showCities) {
@@ -345,59 +410,9 @@ export default function UserProfile() {
     }
   }, [showCities])
 
-    //----------------------------------------------------
-    async function handlesubmit() {
-      // Guardar datos en supabase !!!!!
-      
-  
-      if (validate()) {
-  
-        //Update partners table (si modifico email o teléfono)
-        let modifyPartnersT = async (user, modInfo) => {
-          let { data, error } = await supabase
-            .from('partners')
-            .update({
-              phone_number: modInfo.phone,
-              email: modInfo.email
-            })
-            .eq('dni', user.dni)
-        }
-  
-        //Update address table (si modifico dirección o localidad)
-        let modifyAddressT = async (user, modInfo) => {
-          let { data, error } = await supabase
-            .from('address')
-            .update({
-              street: modInfo.street,
-              street_number: modInfo.street_number,
-              floor: modInfo.floor,
-              department: modInfo.department,
-              locality_id: modInfo.locality_id, 
-            })
-            .eq('partner_dni', user.dni)
-            if (error) console.log(error);
-        }
-  
-
-        modifyAddressT(user, modInfo)
-        console.log('Guardó',modInfo)
-        setModify(false)
-        setModInfo(null)
-        setUser(null)
-        let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
-        fetchUserData(userDni);
-        await Swal.fire({
-          title: 'Exito!',
-          text: 'Sus datos fueron guardados',
-          icon: 'success',
-          confirmButtonText: 'OK'
-        })
-        window.location.reload()
-      } else {
-
-      }
-    }
-    //----------------------------------------------------
+  let handleback = (e) => {
+    //botón para volver a la página anterior o salir
+  }
 
   return (
     <div className="ProfilePage_Cont">
@@ -566,13 +581,13 @@ export default function UserProfile() {
                       <option
                         className="inputSel"
                         key={index}
-                        value={state.state_name}
-                      >{state.state_name}</option>
+                        value={state}
+                      >{state}</option>
                     ))}
                   </TextField>
 
                   {/* cities */}
-                  {showCities && <Autocomplete
+                  <Autocomplete
                     id="cityInput"
                     name="locality"
                     //  Acá va el arreglo a mostrar en el selector
@@ -588,6 +603,14 @@ export default function UserProfile() {
                     helperText={error.locality}
                     // getOptionLabel={(option) => console.log(option.name)}
                     renderOption={(option) => option}
+                    // {id:, name:,postal_code:}
+                    // {showCities && showCities.map((locality, index) => (
+                    //   <option
+                    //     className="inputSel"
+                    //     key={index}
+                    //     value={locality}
+                    //   >{locality}</option>
+                    // ))}
                     renderInput={(params) => (
                       <TextField
                         id="cityInputopt"
@@ -604,7 +627,6 @@ export default function UserProfile() {
                       />
                     )}
                   />
-                  }
 
                   <TextField
                     name="postal_code"
@@ -616,7 +638,6 @@ export default function UserProfile() {
                     onChange={handlechange}
                     error={error.postal_code}
                     helperText={error.postal_code}
-                  
                   />
 
                   {/* {modify && <Button
@@ -631,7 +652,6 @@ export default function UserProfile() {
                 */}
                   <Button
                     id="savebtn"
-                    disabled = {!validate()}
                     variant="contained"
                     className={classes.modButton}
                     onClick={handlesubmit}
