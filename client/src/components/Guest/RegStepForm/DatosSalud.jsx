@@ -7,39 +7,42 @@ import {
   InputAdornment,
   Checkbox,
 } from "@material-ui/core";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import validator from "./Validator.js";
-import styles from "./DatosSalud.module.css"
+import styles from "./DatosSalud.module.css";
 const DatosSalud = () => {
-  const [inputs, setInputs] = useState({
-completeName: "",
-dni: "",
-typeSurgery: "",
-surgeryDiagnosis: "",
-typeProsthesis: "",
-psychDiagnosis: "",
-psychMeds: "",
-psychhospitalization: "",
-hospitalizationReason: "",
-otherT: "",
-otherTDiagnosis: "",
-otherTMedic: "",
-otherTNumber: "",
-studiesDiagnostic: "",
-hereditaryDiseases: "",
-bloodTransReason: "",
-childrens: "",
-studiesSixMonthsD: "",
-VHDetail: "",
-VHDiagnostic: "",
-otherDiabetes: "",
-adictionsDetail: "",
-eatingDisordersD: "",
-weight: "",
-height: "",
-disabilityCertD: "",
-otherPatD: ""
+  const [textInputs, setTextInputs] = useState({
+    completeName: "",
+    typeSurgery: "",
+    surgeryDiagnosis: "",
+    typeProsthesis: "",
+    psychDiagnosis: "",
+    psychhospitalization: "",
+    hospitalizationReason: "",
+    otherT: "",
+    otherTDiagnosis: "",
+    otherTMedic: "",
+    studiesDiagnostic: "",
+    hereditaryDiseases: "",
+    bloodTransReason: "",
+    studiesSixMonthsD: "",
+    VHDetail: "",
+    otherDiabetes: "",
+    adictionsDetail: "",
+    eatingDisordersD: "",
+    otherPatD: ""
   });
+  const [textInputsNum,setInputsTextNum] = useState({
+    dni: "",
+    otherTNumber: "",
+    childrens: "",
+    weight: "",
+    height: "",
+  })
+  const [textInputsMix, setInputsTextMix] = useState({ 
+  psychMeds: "",
+  VHDiagnostic: ""
+  })
   const [radioInputs, SetRadioInputs] = useState({
     surgeryRad: "",
     paceMakerRad: "",
@@ -64,53 +67,127 @@ otherPatD: ""
     dateSurgery: "",
     prosthesisDate: "",
     psychhospitalizationDate: "",
-    hospitalizationnDate: "",
+    hospitalizationDate: "",
     medicalStudiesDate: "",
     bloodTransDate: "",
     treatmentDate: "",
   });
-  const [checkInputs, setcheckInputs] = useState({})
-  const [errors, setErrors] = useState({
-    // dateErrors:{
-    //   dateSurgery: "",
-    //   prosthesisDate: "",
-    //   psychhospitalizationDate: "",
-    //   hospitalizationnDate: "",
-    //   medicalStudiesDate: "",
-    //   bloodTransDate: "",
-    //   treatmentDate: "",
-    // },
-    // radioErrors:{
-    //   surgeryRad: "",
-    //   paceMakerRad: "",
-    //   prosthesisRad: "",
-    //   psychiatricRad: "",
-    //   psychActuallyRad: "",
-    //   hospitalizationRad: "",
-    //   otherTreatmentsRad: "",
-    //   medicalResultsRad: "",
-    //   hereditaryDiseasesRad: "",
-    //   bloodTransRad: "",
-    //   pregnantRad: "",
-    //   studiesSixMonthsRad: "",
-    //   visionHearingRad: "",
-    //   diabetesRad: "",
-    //   adictionsRad: "",
-    //   treatmentAdictionsRad: "",
-    //   eatingDisordersRad: "",
-    //   otherPatRad: "",
-    // }
-  });
-  // const [errorsDate,setErrorsDate] = useState({})
-  const handleChange = (e) => {
-    setInputs((prevState) => {
-      return {
-        ...prevState,
-        [e.target.name]: e.target.value,
-      };
+  const [checkInputs, setcheckInputs] = useState(
+    {
+      accept:""
     });
-     setErrors({...errors,textErrors:validator({...inputs,[e.target.name]: e.target.value},"text")})
+  const [errors, setErrors] = useState({
+    textErrors:{
+    completeName: "",
+    typeSurgery: "",
+    surgeryDiagnosis: "",
+    typeProsthesis: "",
+    psychDiagnosis: "",
+    psychhospitalization: "",
+    hospitalizationReason: "",
+    otherT: "",
+    otherTDiagnosis: "",
+    otherTMedic: "",
+    studiesDiagnostic: "",
+    hereditaryDiseases: "",
+    bloodTransReason: "",
+    studiesSixMonthsD: "",
+    VHDetail: "",
+    otherDiabetes: "",
+    adictionsDetail: "",
+    eatingDisordersD: "", 
+    disabilityCertD: "",
+    otherPatD: ""
+    },
+    textMixErrors:{
+        psychMeds: "",
+        VHDiagnostic: ""
+    },
+    textNumErrors:{
+      dni: "",
+      otherTNumber: "",
+      childrens: "",
+      weight: "",
+      height: ""
+    },
+    dateErrors:{
+      dateSurgery: "",
+      prosthesisDate: "",
+      psychhospitalizationDate: "",
+      hospitalizationDate: "",
+      medicalStudiesDate: "",
+      bloodTransDate: "",
+      treatmentDate: "",
+    },
+    radioErrors:{
+      surgeryRad: "",
+      paceMakerRad: "",
+      prosthesisRad: "",
+      psychiatricRad: "",
+      psychActuallyRad: "",
+      hospitalizationRad: "",
+      otherTreatmentsRad: "",
+      medicalResultsRad: "",
+      hereditaryDiseasesRad: "",
+      bloodTransRad: "",
+      pregnantRad: "",
+      studiesSixMonthsRad: "",
+      visionHearingRad: "",
+      diabetesRad: "",
+      adictionsRad: "",
+      treatmentAdictionsRad: "",
+      eatingDisordersRad: "",
+      otherPatRad: "",
+    }
+  });
+  
+  function saveInLocalStorage() {
+    localStorage.setItem(
+      "datosSalud",
+      JSON.stringify({
+        ...textInputs,
+        ...textInputsNum,
+        ...textInputsMix,
+        ...dateInputs,
+        ...radioInputs,
+      })
+    );
+    localStorage.setItem("errorsSalud", JSON.stringify({ ...errors }));
+  }
+  const handleTextChange = (e) => {
+    setTextInputs({ ...textInputs, [e.target.name]: e.target.value });
+
+    setErrors({
+      ...errors,
+      textErrors: validator(
+        { ...textInputs, [e.target.name]: e.target.value },
+        "text"
+      ),
+    });
   };
+  const handleTextNumberChange = (e) => {
+    setInputsTextNum({ ...textInputsNum, [e.target.name]: e.target.value });
+
+    setErrors({
+      ...errors,
+      textNumErrors: validator(
+        { ...textInputsNum, [e.target.name]: e.target.value },
+        "number"
+      ),
+    });
+  };
+  const handleTextMixChange = (e) => {
+    setInputsTextMix({...textInputsMix, [e.target.name]: e.target.value });
+
+    setErrors({
+      ...errors,
+      textMixErrors: validator(
+        { ...textInputsMix, [e.target.name]: e.target.value },
+        "mix"
+      ),
+    });
+  }
+
   const handleRadioInputs = (e) => {
     SetRadioInputs((prevState) => {
       return {
@@ -118,26 +195,30 @@ otherPatD: ""
         [e.target.name]: e.target.value,
       };
     });
-    setErrors({...errors,radioErrors:validator({...radioInputs,[e.target.name]: e.target.value}, "radio")});
+    setErrors({
+      ...errors,
+      radioErrors: validator(
+        { ...radioInputs, [e.target.name]: e.target.value },
+        "radio"
+      ),
+    });
   };
   const handleDate = (e) => {
-    console.log("entro el input",e.target.value)
+    console.log("entro el input", e.target.value);
     setDateInputs((prevState) => {
       return {
         ...prevState,
-        [e.target.name]: (e.target.value),
+        [e.target.name]: e.target.value,
       };
     });
-    setErrors({...errors,dateErrors:validator({...dateInputs,[e.target.name]: e.target.value},"date")})
+    setErrors({
+      ...errors,
+      dateErrors: validator(
+        { ...dateInputs, [e.target.name]: e.target.value },
+        "date"
+      ),
+    });
   };
-  // const labigfuncion = ()=>{
-  //   setErrors({...errors,dateErrors:validator(dateInputs,"date")})
-  //   setErrors({...errors,radioErrors:validator(radioInputs, "radio")})
-
-  //   if(errors.radioErrors.radComplete&&errors.dateErrors.datecomplete&& y otra verdura ){
-  //     habilitame el boton
-  //   }  }
-
 
   return (
     <>
@@ -147,24 +228,22 @@ otherPatD: ""
           name="completeName"
           label="Nombre y Apeliido"
           variant="outlined"
-          value={inputs.completeName}
-          onChange={handleChange}
-          
-          error={checkInputs.accept&&errors.input}
-          helperText= "Apretaste cualquiera"
-        
+          value={textInputs.completeName}
+          onChange={handleTextChange}
+          onBlur={saveInLocalStorage}
         />
         <TextField
           name="dni"
           label="DNI"
           type="number"
           variant="outlined"
-          value={inputs.dni}
-          onChange={handleChange}
+          value={textInputsNum.dni}
+          onChange={handleTextNumberChange}
+          onBlur={saveInLocalStorage}
         />
       </div>
       <div classsname={styles.pocho}>
-        <FormLabel  component="legend">
+        <FormLabel component="legend">
           {" "}
           1¿Posee antecedentes de cirugías?{" "}
         </FormLabel>
@@ -173,6 +252,7 @@ otherPatD: ""
           name="surgeryRad"
           value={radioInputs.surgeryRad}
           onChange={handleRadioInputs}
+          onBlur={saveInLocalStorage}
         >
           <FormControlLabel value="No" control={<Radio />} label="No" />
           <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -183,8 +263,9 @@ otherPatD: ""
               name="typeSurgery"
               label="Tipo de Cirugia"
               variant="outlined"
-              value={inputs.typeSurgery}
-              onChange={handleChange}
+              value={textInputs.typeSurgery}
+              onChange={handleTextChange}
+              onBlur={saveInLocalStorage}
             />
             <TextField
               name="dateSurgery"
@@ -196,18 +277,18 @@ otherPatD: ""
               }}
               onChange={handleDate}
               value={dateInputs.dateSurgery}
+              onBlur={saveInLocalStorage}
             />
             <TextField
               name="surgeryDiagnosis"
               label="Diagnostico"
               variant="outlined"
-              value={inputs.surgeryDiagnosis}
-              onChange={handleChange}
+              value={textInputs.surgeryDiagnosis}
+              onChange={handleTextChange}
+              onBlur={saveInLocalStorage}
             />
           </div>
-        ):null
-       }
-        
+        ) : null}
       </div>
       <FormLabel component="legend">
         {" "}
@@ -218,6 +299,7 @@ otherPatD: ""
         name="paceMakerRad"
         value={radioInputs.paceMakerRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -231,6 +313,7 @@ otherPatD: ""
         name="prosthesisRad"
         value={radioInputs.prosthesisRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -245,13 +328,15 @@ otherPatD: ""
             type="date"
             InputLabelProps={{ shrink: true }}
             onChange={handleDate}
+            onBlur={saveInLocalStorage}
           />
           <TextField
             name="typeProsthesis"
             label="Tipo de prótesis:"
             variant="outlined"
-            value={inputs.typeProsthesis}
-            onChange={handleChange}
+            value={textInputs.typeProsthesis}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
         </div>
       ) : null}
@@ -264,6 +349,7 @@ otherPatD: ""
         name="psychiatricRad"
         value={radioInputs.psychiatricRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -276,6 +362,7 @@ otherPatD: ""
         name="psychActuallyRad"
         value={radioInputs.psychActuallyRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -286,22 +373,25 @@ otherPatD: ""
             name="psychDiagnosis"
             label="Diagnóstico"
             variant="outlined"
-            value={inputs.psychDiagnosis}
-            onChange={handleChange}
+            value={textInputs.psychDiagnosis}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
           <TextField
             name="psychMeds"
             label="Medicación"
             variant="outlined"
-            value={inputs.psychMeds}
-            onChange={handleChange}
+            value={textInputsMix.psychMeds}
+            onChange={handleTextMixChange}
+            onBlur={saveInLocalStorage}
           />
           <TextField
             name="psychhospitalization"
             label="Internaciones Psiquiátricas"
             variant="outlined"
-            value={inputs.psychhospitalization}
-            onChange={handleChange}
+            value={textInputs.psychhospitalization}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
           <TextField
             name="psychhospitalizationDate"
@@ -311,6 +401,7 @@ otherPatD: ""
             type="date"
             InputLabelProps={{ shrink: true }}
             onChange={handleDate}
+            onBlur={saveInLocalStorage}
           />
         </div>
       ) : null}
@@ -323,6 +414,7 @@ otherPatD: ""
         name="hospitalizationRad"
         value={radioInputs.hospitalizationRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -333,17 +425,19 @@ otherPatD: ""
             name="hospitalizationReason"
             label="Motivo"
             variant="outlined"
-            value={inputs.hospitalizationReason}
-            onChange={handleChange}
+            value={textInputs.hospitalizationReason}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
           <TextField
-            name="hospitalizationnDate"
+            name="hospitalizationDate"
             label="Fecha"
             variant="outlined"
-            value={dateInputs.hospitalizationnDate}
+            value={dateInputs.hospitalizationDate}
             type="date"
             InputLabelProps={{ shrink: true }}
             onChange={handleDate}
+            onBlur={saveInLocalStorage}
           />
         </div>
       ) : null}
@@ -357,6 +451,7 @@ otherPatD: ""
         name="otherTreatmentsRad"
         value={radioInputs.otherTreatmentsRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -367,30 +462,34 @@ otherPatD: ""
             name="otherT"
             label="¿Cuál/es?"
             variant="outlined"
-            value={inputs.otherT}
-            onChange={handleChange}
+            value={textInputs.otherT}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
           <TextField
             name="otherTDiagnosis"
             label="Diagnóstico"
             variant="outlined"
-            value={inputs.otherTDiagnosis}
-            onChange={handleChange}
+            value={textInputs.otherTDiagnosis}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
           <TextField
             name="otherTMedic"
             label="Médico Tratante"
             variant="outlined"
-            value={inputs.otherTMedic}
-            onChange={handleChange}
+            value={textInputs.otherTMedic}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
           <TextField
             name="otherTNumber"
             label="Teléfono"
             type="number"
             variant="outlined"
-            value={inputs.otherTNumber}
-            onChange={handleChange}
+            value={textInputsNum.otherTNumber}
+            onChange={handleTextNumberChange}
+            onBlur={saveInLocalStorage}
           />
         </div>
       ) : null}
@@ -405,6 +504,7 @@ otherPatD: ""
         type="date"
         InputLabelProps={{ shrink: true }}
         onChange={handleDate}
+        onBlur={saveInLocalStorage}
       />
       <FormLabel component="legend">¿El resultado fue normal?</FormLabel>
       <RadioGroup
@@ -412,6 +512,7 @@ otherPatD: ""
         name="medicalResultsRad"
         value={radioInputs.medicalResultsRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -423,9 +524,10 @@ otherPatD: ""
             name="studiesDiagnostic"
             label="Diagnóstico"
             variant="outlined"
-            value={inputs.studiesDiagnostic}
-            onChange={handleChange}
-        />
+            value={textInputs.studiesDiagnostic}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
+          />
         </div>
       ) : null}
 
@@ -437,6 +539,7 @@ otherPatD: ""
         name="hereditaryDiseasesRad"
         value={radioInputs.hereditaryDiseasesRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -447,8 +550,9 @@ otherPatD: ""
             name="hereditaryDiseases"
             label="¿Cuál/es?"
             variant="outlined"
-            value={inputs.hereditaryDiseases}
-            onChange={handleChange}
+            value={textInputs.hereditaryDiseases}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
         </div>
       ) : null}
@@ -461,6 +565,7 @@ otherPatD: ""
         name="bloodTransRad"
         value={radioInputs.bloodTransRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -471,8 +576,9 @@ otherPatD: ""
             name="bloodTransReason"
             label="Causa"
             variant="outlined"
-            value={inputs.bloodTransReason}
-            onChange={handleChange}
+            value={textInputs.bloodTransReason}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
           <TextField
             name="bloodTransDate"
@@ -482,6 +588,7 @@ otherPatD: ""
             type="date"
             InputLabelProps={{ shrink: true }}
             onChange={handleDate}
+            onBlur={saveInLocalStorage}
           />
         </div>
       ) : null}
@@ -491,6 +598,7 @@ otherPatD: ""
         name="pregnantRad"
         value={radioInputs.pregnantRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -501,8 +609,9 @@ otherPatD: ""
         label=""
         type="number"
         variant="outlined"
-        value={inputs.childrens}
-        onChange={handleChange}
+        value={textInputsNum.childrens}
+        onChange={handleTextNumberChange}
+        onBlur={saveInLocalStorage}
       />
       <FormLabel component="legend">
         12- ¿Padece actualmente alguna enfermedad o alteración física que
@@ -513,6 +622,7 @@ otherPatD: ""
         name="studiesSixMonthsRad"
         value={radioInputs.studiesSixMonthsRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -522,10 +632,10 @@ otherPatD: ""
           <TextField
             name="studiesSixMonthsD"
             label="¿Cuál/es?"
-            type="number"
             variant="outlined"
-            value={inputs.studiesSixMonthsD}
-            onChange={handleChange}
+            value={textInputs.studiesSixMonthsD}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
         </div>
       ) : null}
@@ -538,6 +648,7 @@ otherPatD: ""
         name="visionHearingRad"
         value={radioInputs.visionHearingRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -547,15 +658,17 @@ otherPatD: ""
               name="VHDetail"
               label="¿Cuál/es?"
               variant="outlined"
-              value={inputs.VHDetail}
-              onChange={handleChange}
+              value={textInputs.VHDetail}
+              onChange={handleTextChange}
+              onBlur={saveInLocalStorage}
             />
             <TextField
               name="VHDiagnostic"
               label="Diagnostico"
               variant="outlined"
-              value={inputs.VHDiagnostic}
-              onChange={handleChange}
+              value={textInputsMix.VHDiagnostic}
+              onChange={handleTextMixChange}
+              onBlur={saveInLocalStorage}
             />
           </div>
         ) : null}
@@ -570,6 +683,7 @@ otherPatD: ""
         name="diabetesRad"
         value={radioInputs.diabetesRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -578,8 +692,9 @@ otherPatD: ""
         name="otherDiabetes"
         label="Otras,¿Cuál/es?"
         variant="outlined"
-        value={inputs.otherDiabetes}
-        onChange={handleChange}
+        value={textInputs.otherDiabetes}
+        onChange={handleTextChange}
+        onBlur={saveInLocalStorage}
       />
 
       <FormLabel component="legend">
@@ -591,6 +706,7 @@ otherPatD: ""
         name="adictionsRad"
         value={radioInputs.adictionsRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -601,8 +717,9 @@ otherPatD: ""
             name="adictionsDetail"
             label="¿Cuál/es?"
             variant="outlined"
-            value={inputs.adictionsDetail}
-            onChange={handleChange}
+            value={textInputs.adictionsDetail}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
         </div>
       ) : null}
@@ -613,6 +730,7 @@ otherPatD: ""
         name="treatmentAdictionsRad"
         value={radioInputs.treatmentAdictionsRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -627,6 +745,7 @@ otherPatD: ""
             type="date"
             InputLabelProps={{ shrink: true }}
             onChange={handleDate}
+            onBlur={saveInLocalStorage}
           />
         </div>
       )}
@@ -641,6 +760,7 @@ otherPatD: ""
         name="eatingDisordersRad"
         value={radioInputs.eatingDisordersRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -651,8 +771,9 @@ otherPatD: ""
             name="eatingDisordersD"
             label="¿Cuál/es?"
             variant="outlined"
-            value={inputs.eatingDisordersD}
-            onChange={handleChange}
+            value={textInputs.eatingDisordersD}
+            onChange={handleTextChange}
+            onBlur={saveInLocalStorage}
           />
         </div>
       )}
@@ -661,21 +782,25 @@ otherPatD: ""
       <TextField
         name="weight"
         variant="outlined"
-        value={inputs.weight}
+        type= "number"
+        value={textInputsNum.weight}
         InputProps={{
           endAdornment: <InputAdornment position="start">Kg</InputAdornment>,
         }}
-        onChange={handleChange}
+        onChange={handleTextNumberChange}
+        onBlur={saveInLocalStorage}
       />
       <FormLabel component="legend">18- Altura </FormLabel>
       <TextField
         name="height"
+        type= "number"
         variant="outlined"
-        value={inputs.height}
+        value={textInputsNum.height}
         InputProps={{
           endAdornment: <InputAdornment position="start">m</InputAdornment>,
         }}
-        onChange={handleChange}
+        onChange={handleTextNumberChange}
+        onBlur={saveInLocalStorage}
       />
 
       <FormLabel component="legend">
@@ -687,11 +812,12 @@ otherPatD: ""
         name="disabilityCertRad"
         value={radioInputs.disabilityCertRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
       </RadioGroup>
-      
+
       <FormLabel component="legend">
         {" "}
         20- ¿Padece o padeció alguna patología aparte de las mencionadas en los
@@ -702,6 +828,7 @@ otherPatD: ""
         name="otherPatRad"
         value={radioInputs.otherPatRad}
         onChange={handleRadioInputs}
+        onBlur={saveInLocalStorage}
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
@@ -711,22 +838,25 @@ otherPatD: ""
         name="otherPatD"
         label="¿Cuál/es?"
         variant="outlined"
-        value={inputs.otherPatD}
-        onChange={handleChange}
+        value={textInputs.otherPatD}
+        onChange={handleTextChange}
+        onBlur={saveInLocalStorage}
       />
 
       <div>
         <Checkbox
-          name= "accept"
+          name="accept"
           color="primary"
+          value={checkInputs.accept}
           inputProps={{ "aria-label": "secondary checkbox" }}
-          onChange= {(e)=>setcheckInputs({
-            [e.target.name] : e.target.checked
-          })}
-          
+          onChange={(e) =>
+            setcheckInputs({
+              [e.target.name]: e.target.checked,
+            })
+          }
+          onBlur={saveInLocalStorage}
         />
         <FormLabel component="legend">
-    
           "Declaro bajo juramento que en la presente informé la totalidad de mis
           antecedentes de salud y/o de cada uno de los integrantes de mi grupo
           familiar, no habiendo omitido dato alguno, estando por lo tanto
@@ -739,5 +869,5 @@ otherPatD: ""
       </div>
     </>
   );
-}
+};
 export default DatosSalud;

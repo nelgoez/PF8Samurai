@@ -6,6 +6,7 @@ const DatosRevision = () =>{
 
 	const datosTitular = JSON.parse(localStorage.getItem('datosTitular'));
 	const datosEmpresa = JSON.parse(localStorage.getItem('datosEmpresa'));
+	const datosSalud = JSON.parse(localStorage.getItem("datosSalud"))
 
 
 	return (
@@ -47,6 +48,7 @@ const DatosRevision = () =>{
 				</div>
 			</div>
 		</div> 
+		
 		)
 }
 export default DatosRevision
