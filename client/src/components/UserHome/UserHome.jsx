@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import supabase from '../../../supabase.config.js';
-import Carousel from '../../Guest/LandingPage/Carousel.jsx';
+import Carousel from '../LandingPage/Carousel.jsx';
 import style from './UserHome.module.css';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
