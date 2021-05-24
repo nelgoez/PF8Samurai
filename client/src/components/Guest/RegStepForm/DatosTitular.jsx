@@ -25,7 +25,6 @@ const DatosTitular = () => {
     number: "",
   });
   const [textInputsMix, setInputsTextMix] = useState({
-    apartment: "",
     street_name: "",
   });
   const [dateInputs, setDateInputs] = useState({
@@ -38,13 +37,12 @@ const DatosTitular = () => {
     locality: "",
   });
   const [emailInputs, setEmailInputs] = useState({ email: "" });
+  const [apartmentInput,setApartmentInput] = useState({apartment:""})
   const [errors, setErrors] = useState({
     textErrors: {
       first_name: "",
       last_name: "",
       occupation: "",
-      street_name: "",
-      apartment: "",
     },
     textNumErrors: {
       dni: "",
@@ -53,7 +51,6 @@ const DatosTitular = () => {
       number: "",
     },
     textMixErrors: {
-      apartment: "",
       street_name: "",
     },
     dateErrors: { birth_date: "" },
@@ -65,7 +62,7 @@ const DatosTitular = () => {
     },
     emailErrors: { email: "" },
   });
-  let laquerypapa ={
+  let dataQuery ={
   name : useQuery().get("first_name"),
   email: useQuery().get("email"),
   dni: useQuery().get("dni"),
@@ -74,18 +71,18 @@ const DatosTitular = () => {
   useEffect(() => {
     const datosTitular = JSON.parse(localStorage.getItem("datosTitular"));
    
-    if(laquerypapa){
+    if(dataQuery){
       setTextInputs(
         {...textInputs,
-        first_name: laquerypapa.name}
+        first_name: dataQuery.name}
       )
       setInputsTextNum(
-        {...textInputsMix,
-          dni: laquerypapa.dni,
-          phone_number: laquerypapa.phone_number
+        {...textInputsNum,
+          dni: dataQuery.dni,
+          phone_number: dataQuery.phone_number
       })
       setEmailInputs({
-        email: laquerypapa.email
+        email: dataQuery.email
       })
     }
     if (datosTitular) {
@@ -101,7 +98,6 @@ const DatosTitular = () => {
         number: datosTitular.number,
       });
       setInputsTextMix({
-        apartment: datosTitular.apartment,
         street_name: datosTitular.street_name,
       });
       setEmailInputs({
@@ -116,6 +112,8 @@ const DatosTitular = () => {
         locality: datosTitular.locality, //falta
         state: datosTitular.state,
       });
+      setApartmentInput({apartment: datosTitular.apartment})
+
       setErrors(errors => ({
         ...errors,
         textErrors: validator(
@@ -191,6 +189,7 @@ const DatosTitular = () => {
         ...dateInputs,
         ...emailInputs,
         ...selectInputs,
+        ...apartmentInput
       })
     );
     localStorage.setItem("errorsTitular", JSON.stringify({ ...errors }));
@@ -530,9 +529,9 @@ const DatosTitular = () => {
             type="text"
             name="apartment"
             autoComplete="off"
-            value={textInputsMix.apartment}
+            value={apartmentInput.apartment}
             variant="outlined"
-            onChange={(e) => setInputsTextMix({ ...textInputsMix, [e.target.name]: e.target.value })}
+            onChange={(e) => setApartmentInput({[e.target.name]: e.target.value })}
             onBlur={saveInLocalStorage}
           />
         </div>

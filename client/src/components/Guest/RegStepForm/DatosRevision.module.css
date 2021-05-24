@@ -17,17 +17,40 @@
     display: flex;
     margin-left:13%;
 }
+.ajuste{
+    display: flex;
+    flex-wrap: wrap;
+}
 
 .datosTitular{
     display: flex;
-    flex-direction:row;
+    flex-direction:column;
 }
 .firstColumn{
+    padding: 5px;
     display: flex;
     flex-direction:column;
+    background: aliceblue;
+    height: fit-content
+
 }
 
 .datosEmpresa{
+    margin-left: 10px;
     display: flex;
     flex-direction:column;
+    padding: 5px;
+    background: aliceblue;
+    height: fit-content
+}
+.salud{
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    padding: 5px;
+    padding: 10px;
+}
+.segmentos{
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

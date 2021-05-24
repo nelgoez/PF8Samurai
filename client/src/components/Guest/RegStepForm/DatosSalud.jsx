@@ -7,7 +7,7 @@ import {
   InputAdornment,
   Checkbox,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import validator from "./Validator.js";
 import styles from "./DatosSalud.module.css";
 const DatosSalud = () => {
@@ -27,22 +27,22 @@ const DatosSalud = () => {
     bloodTransReason: "",
     studiesSixMonthsD: "",
     VHDetail: "",
-    otherDiabetes: "",
+
     adictionsDetail: "",
     eatingDisordersD: "",
-    otherPatD: ""
+    otherPatD: "",
   });
-  const [textInputsNum,setInputsTextNum] = useState({
+  const [textInputsNum, setInputsTextNum] = useState({
     dni: "",
     otherTNumber: "",
     childrens: "",
     weight: "",
     height: "",
-  })
-  const [textInputsMix, setInputsTextMix] = useState({ 
-  psychMeds: "",
-  VHDiagnostic: ""
-  })
+  });
+  const [textInputsMix, setInputsTextMix] = useState({
+    psychMeds: "",
+    VHDiagnostic: "",
+  });
   const [radioInputs, SetRadioInputs] = useState({
     surgeryRad: "",
     paceMakerRad: "",
@@ -62,6 +62,7 @@ const DatosSalud = () => {
     treatmentAdictionsRad: "",
     eatingDisordersRad: "",
     otherPatRad: "",
+    disabilityCertRad:""
   });
   const [dateInputs, setDateInputs] = useState({
     dateSurgery: "",
@@ -71,46 +72,44 @@ const DatosSalud = () => {
     medicalStudiesDate: "",
     bloodTransDate: "",
     treatmentDate: "",
+    formDate: "",
   });
-  const [checkInputs, setcheckInputs] = useState(
-    {
-      accept:""
-    });
+  const [checkInputs, setcheckInputs] = useState({
+    accept: "",
+  });
   const [errors, setErrors] = useState({
-    textErrors:{
-    completeName: "",
-    typeSurgery: "",
-    surgeryDiagnosis: "",
-    typeProsthesis: "",
-    psychDiagnosis: "",
-    psychhospitalization: "",
-    hospitalizationReason: "",
-    otherT: "",
-    otherTDiagnosis: "",
-    otherTMedic: "",
-    studiesDiagnostic: "",
-    hereditaryDiseases: "",
-    bloodTransReason: "",
-    studiesSixMonthsD: "",
-    VHDetail: "",
-    otherDiabetes: "",
-    adictionsDetail: "",
-    eatingDisordersD: "", 
-    disabilityCertD: "",
-    otherPatD: ""
+    textErrors: {
+      completeName: "",
+      typeSurgery: "",
+      surgeryDiagnosis: "",
+      typeProsthesis: "",
+      psychDiagnosis: "",
+      psychhospitalization: "",
+      hospitalizationReason: "",
+      otherT: "",
+      otherTDiagnosis: "",
+      otherTMedic: "",
+      studiesDiagnostic: "",
+      hereditaryDiseases: "",
+      bloodTransReason: "",
+      studiesSixMonthsD: "",
+      VHDetail: "",
+      adictionsDetail: "",
+      eatingDisordersD: "",
+      otherPatD: "",
     },
-    textMixErrors:{
-        psychMeds: "",
-        VHDiagnostic: ""
+    textMixErrors: {
+      psychMeds: "",
+      VHDiagnostic: "",
     },
-    textNumErrors:{
+    textNumErrors: {
       dni: "",
       otherTNumber: "",
       childrens: "",
       weight: "",
-      height: ""
+      height: "",
     },
-    dateErrors:{
+    dateErrors: {
       dateSurgery: "",
       prosthesisDate: "",
       psychhospitalizationDate: "",
@@ -118,8 +117,9 @@ const DatosSalud = () => {
       medicalStudiesDate: "",
       bloodTransDate: "",
       treatmentDate: "",
+      formDate: "",
     },
-    radioErrors:{
+    radioErrors: {
       surgeryRad: "",
       paceMakerRad: "",
       prosthesisRad: "",
@@ -138,9 +138,147 @@ const DatosSalud = () => {
       treatmentAdictionsRad: "",
       eatingDisordersRad: "",
       otherPatRad: "",
-    }
+      disabilityCertRad:""
+    },
+    checkErrors:{accept:""}
   });
-  
+  useEffect(() => {
+    const datosSalud = JSON.parse(localStorage.getItem("datosSalud"));
+    if (datosSalud) {
+      setTextInputs({
+        completeName: datosSalud.completeName,
+        typeSurgery: datosSalud.typeSurgery,
+        surgeryDiagnosis: datosSalud.surgeryDiagnosis,
+        typeProsthesis: datosSalud.typeProsthesis,
+        psychDiagnosis: datosSalud.psychDiagnosis,
+        psychhospitalization: datosSalud.psychhospitalization,
+        hospitalizationReason: datosSalud.hospitalizationReason,
+        otherT: datosSalud.otherT,
+        otherTDiagnosis: datosSalud.otherTDiagnosis,
+        otherTMedic: datosSalud.otherTMedic,
+        studiesDiagnostic: datosSalud.studiesDiagnostic,
+        hereditaryDiseases: datosSalud.hereditaryDiseases,
+        bloodTransReason: datosSalud.bloodTransReason,
+        studiesSixMonthsD: datosSalud.studiesSixMonthsD,
+        VHDetail: datosSalud.VHDetail,
+        adictionsDetail: datosSalud.adictionsDetail,
+        eatingDisordersD: datosSalud.eatingDisordersD,
+        otherPatD: datosSalud.otherPatD,
+      });
+      setInputsTextNum({
+        dni: datosSalud.dni,
+        otherTNumber: datosSalud.otherTNumber,
+        childrens: datosSalud.childrens,
+        weight: datosSalud.weight,
+        height: datosSalud.height,
+      });
+      setInputsTextMix({
+        psychMeds: datosSalud.psychMeds,
+        VHDiagnostic: datosSalud.VHDiagnostic,
+      });
+      SetRadioInputs({
+        surgeryRad: datosSalud.surgeryRad,
+        paceMakerRad: datosSalud.paceMakerRad,
+        prosthesisRad: datosSalud.prosthesisRad,
+        psychiatricRad: datosSalud.psychiatricRad,
+        psychActuallyRad: datosSalud.psychActuallyRad,
+        hospitalizationRad: datosSalud.hospitalizationRad,
+        otherTreatmentsRad: datosSalud.otherTreatmentsRad,
+        medicalResultsRad: datosSalud.medicalResultsRad,
+        hereditaryDiseasesRad: datosSalud.hereditaryDiseasesRad,
+        bloodTransRad: datosSalud.bloodTransRad,
+        pregnantRad: datosSalud.pregnantRad,
+        studiesSixMonthsRad: datosSalud.studiesSixMonthsRad,
+        visionHearingRad: datosSalud.visionHearingRad,
+        diabetesRad: datosSalud.diabetesRad,
+        adictionsRad: datosSalud.adictionsRad,
+        treatmentAdictionsRad: datosSalud.treatmentAdictionsRad,
+        eatingDisordersRad: datosSalud.eatingDisordersRad,
+        otherPatRad: datosSalud.otherPatRad,
+        disabilityCertRad:datosSalud.disabilityCertRad
+      });
+      setDateInputs({
+        dateSurgery: datosSalud.dateSurgery,
+        prosthesisDate: datosSalud.prosthesisDate,
+        psychhospitalizationDate: datosSalud.psychhospitalizationDate,
+        hospitalizationDate: datosSalud.hospitalizationDate,
+        medicalStudiesDate: datosSalud.medicalStudiesDate,
+        bloodTransDate: datosSalud.bloodTransDate,
+        treatmentDate: datosSalud.treatmentDate,
+        formDate: datosSalud.formDate,
+      });
+      setcheckInputs({
+        accept: datosSalud.accept
+      });
+
+      setErrors((errors) => ({
+        ...errors,
+        textErrors: validator( {
+          completeName: datosSalud.completeName,
+          typeSurgery: datosSalud.typeSurgery,
+          surgeryDiagnosis: datosSalud.surgeryDiagnosis,
+          typeProsthesis: datosSalud.typeProsthesis,
+          psychDiagnosis: datosSalud.psychDiagnosis,
+          psychhospitalization: datosSalud.psychhospitalization,
+          hospitalizationReason: datosSalud.hospitalizationReason,
+          otherT: datosSalud.otherT,
+          otherTDiagnosis: datosSalud.otherTDiagnosis,
+          otherTMedic: datosSalud.otherTMedic,
+          studiesDiagnostic: datosSalud.studiesDiagnostic,
+          hereditaryDiseases: datosSalud.hereditaryDiseases,
+          bloodTransReason: datosSalud.bloodTransReason,
+          studiesSixMonthsD: datosSalud.studiesSixMonthsD,
+          VHDetail: datosSalud.VHDetail,
+          adictionsDetail: datosSalud.adictionsDetail,
+          eatingDisordersD: datosSalud.eatingDisordersD,
+          disabilityCertRad: datosSalud.disabilityCertRad,
+          otherPatD: datosSalud.otherPatD,
+        },"text"),
+        textMixErrors: validator({
+          psychMeds: datosSalud.psychMeds,
+          VHDiagnostic: datosSalud.VHDiagnostic,
+        },"mix"),
+        textNumErrors: validator({
+          dni: datosSalud.dni,
+          otherTNumber: datosSalud.otherTNumber,
+          childrens: datosSalud.childrens,
+          weight: datosSalud.weight,
+          height: datosSalud.height,
+        },"number"),
+        dateErrors: validator({
+          dateSurgery: datosSalud.dateSurgery,
+          prosthesisDate: datosSalud.prosthesisDate,
+          psychhospitalizationDate: datosSalud.psychhospitalizationDate,
+          hospitalizationDate: datosSalud.hospitalizationDate,
+          medicalStudiesDate: datosSalud.medicalStudiesDate,
+          bloodTransDate: datosSalud.bloodTransDate,
+          treatmentDate: datosSalud.treatmentDate,
+          formDate: datosSalud.formDate,
+        },"date"),
+        radioErrors: validator({
+          surgeryRad: datosSalud.surgeryRad,
+          paceMakerRad: datosSalud.paceMakerRad,
+          prosthesisRad: datosSalud.prosthesisRad,
+          psychiatricRad: datosSalud.psychiatricRad,
+          psychActuallyRad: datosSalud.psychActuallyRad,
+          hospitalizationRad: datosSalud.hospitalizationRad,
+          otherTreatmentsRad: datosSalud.otherTreatmentsRad,
+          medicalResultsRad: datosSalud.medicalResultsRad,
+          hereditaryDiseasesRad: datosSalud.hereditaryDiseasesRad,
+          bloodTransRad: datosSalud.bloodTransRad,
+          pregnantRad: datosSalud.pregnantRad,
+          studiesSixMonthsRad: datosSalud.studiesSixMonthsRad,
+          visionHearingRad: datosSalud.visionHearingRad,
+          diabetesRad: datosSalud.diabetesRad,
+          adictionsRad: datosSalud.adictionsRad,
+          treatmentAdictionsRad: datosSalud.treatmentAdictionsRad,
+          eatingDisordersRad: datosSalud.eatingDisordersRad,
+          otherPatRad: datosSalud.otherPatRad,
+        },"radio"),
+        checkErrors:{accept:datosSalud.accept}
+      }));
+    }
+  },[]);
   function saveInLocalStorage() {
     localStorage.setItem(
       "datosSalud",
@@ -150,6 +288,7 @@ const DatosSalud = () => {
         ...textInputsMix,
         ...dateInputs,
         ...radioInputs,
+        ...checkInputs
       })
     );
     localStorage.setItem("errorsSalud", JSON.stringify({ ...errors }));
@@ -177,7 +316,7 @@ const DatosSalud = () => {
     });
   };
   const handleTextMixChange = (e) => {
-    setInputsTextMix({...textInputsMix, [e.target.name]: e.target.value });
+    setInputsTextMix({ ...textInputsMix, [e.target.name]: e.target.value });
 
     setErrors({
       ...errors,
@@ -186,7 +325,7 @@ const DatosSalud = () => {
         "mix"
       ),
     });
-  }
+  };
 
   const handleRadioInputs = (e) => {
     SetRadioInputs((prevState) => {
@@ -219,10 +358,115 @@ const DatosSalud = () => {
       ),
     });
   };
+  useEffect(() => {
+    if (radioInputs.surgeryRad === "No") {
+      setTextInputs({
+        ...textInputs,
+        typeSurgery: "hide",
+        surgeryDiagnosis: "hide",
+      });
+      setDateInputs({ ...dateInputs, dateSurgery: "hide" });
+    }
+  }, [radioInputs.surgeryRad]);
+
+  useEffect(() => {
+    if (radioInputs.prosthesisRad === "No") {
+      setTextInputs({ ...textInputs, typeProsthesis: "hide" });
+      setDateInputs({ ...dateInputs, prosthesisDate: "hide" });
+    }
+  }, [radioInputs.prosthesisRad]);
+
+  useEffect(() => {
+    if (radioInputs.psychActuallyRad === "No") {
+      setTextInputs({
+        ...textInputs,
+        psychhospitalization: "hide",
+        psychDiagnosis: "hide"
+      });
+      setInputsTextMix({ ...textInputsMix,
+        psychMeds: "hide" });
+      setDateInputs({ ...dateInputs, psychhospitalizationDate: "hide" });
+    }
+  }, [radioInputs.psychActuallyRad]);
+
+  useEffect(() => {
+    if (radioInputs.hospitalizationRad === "No") {
+      setTextInputs({ ...textInputs, hospitalizationReason: "hide" });
+      setDateInputs({ ...dateInputs, hospitalizationDate: "hide" });
+    }
+  }, [radioInputs.hospitalizationRad]);
+
+  useEffect(() => {
+    if (radioInputs.otherTreatmentsRad === "No") {
+      setTextInputs({
+        ...textInputs,
+        otherT: "hide",
+        otherTDiagnosis: "hide",
+        otherTMedic: "hide",
+      });
+      setInputsTextNum({ ...textInputsNum, otherTNumber: "hide" });
+    }
+  }, [radioInputs.otherTreatmentsRad]);
+
+  useEffect(() => {
+    if (radioInputs.hereditaryDiseasesRad === "No") {
+      setTextInputs({ ...textInputs, hereditaryDiseases: "hide" });
+    }
+  }, [radioInputs.hereditaryDiseasesRad]);
+
+  useEffect(() => {
+    if (radioInputs.bloodTransRad === "No") {
+      setTextInputs({ ...textInputs, bloodTransReason: "hide" });
+      setDateInputs({ ...dateInputs, bloodTransDate: "hide" });
+    }
+  }, [radioInputs.bloodTransRad]);
+
+  useEffect(() => {
+    if (radioInputs.studiesSixMonthsRad === "No") {
+      setTextInputs({ ...textInputs, studiesSixMonthsD: "hide" });
+    }
+  }, [radioInputs.studiesSixMonthsRad]);
+
+  useEffect(() => {
+    if (radioInputs.visionHearingRad === "No") {
+      setTextInputs({ ...textInputs, VHDetail: "hide" });
+      setInputsTextMix({ ...textInputsMix, VHDiagnostic: "hide" });
+    }
+  }, [radioInputs.visionHearingRad]);
+
+  useEffect(() => {
+    if (radioInputs.adictionsRad === "No") {
+      setTextInputs({ ...textInputs, adictionsDetail: "hide" });
+    }
+  }, [radioInputs.adictionsRad]);
+
+  useEffect(() => {
+    if (radioInputs.treatmentAdictionsRad === "No") {
+      setDateInputs({ ...dateInputs, treatmentDate: "hide" });
+    }
+  }, [radioInputs.treatmentAdictionsRad]);
+
+  useEffect(() => {
+    if (radioInputs.adictionsRad === "No") {
+      setTextInputs({ ...textInputs, adictionsDetail: "hide" });
+    }
+  }, [radioInputs.adictionsRad]);
+
+  useEffect(() => {
+    if (radioInputs.eatingDisordersRad === "No") {
+      setTextInputs({ ...textInputs, eatingDisordersD: "hide" });
+    }
+  }, [radioInputs.eatingDisordersRad]);
+
+  useEffect(() => {
+    if (radioInputs.otherPatRad === "No") {
+      setTextInputs({ ...textInputs, otherPatD: "hide" });
+    }
+  }, [radioInputs.otherPatRad]);
 
   return (
-    <>
-      <div id="cabecera">
+    <div className={styles.conteiner}>
+      <div >
         <h4> Declaracion jurada de antecedentes de salud </h4>
         <TextField
           name="completeName"
@@ -231,6 +475,10 @@ const DatosSalud = () => {
           value={textInputs.completeName}
           onChange={handleTextChange}
           onBlur={saveInLocalStorage}
+          {...(errors.textErrors.completeName && {
+            error: errors.textErrors.completeName,
+            helperText: errors.textErrors.completeName,
+          })}  
         />
         <TextField
           name="dni"
@@ -240,6 +488,10 @@ const DatosSalud = () => {
           value={textInputsNum.dni}
           onChange={handleTextNumberChange}
           onBlur={saveInLocalStorage}
+          inputProps={{
+              min:0
+            }}
+          
         />
       </div>
       <div classsname={styles.pocho}>
@@ -266,6 +518,10 @@ const DatosSalud = () => {
               value={textInputs.typeSurgery}
               onChange={handleTextChange}
               onBlur={saveInLocalStorage}
+              {...(errors.textErrors.typeSurgery && {
+                error: errors.textErrors.typeSurgery,
+                helperText: errors.textErrors.typeSurgery,
+              })}
             />
             <TextField
               name="dateSurgery"
@@ -286,6 +542,10 @@ const DatosSalud = () => {
               value={textInputs.surgeryDiagnosis}
               onChange={handleTextChange}
               onBlur={saveInLocalStorage}
+              {...(errors.textErrors.surgeryDiagnosis && {
+                error: errors.textErrors.surgeryDiagnosis,
+                helperText: errors.textErrors.surgeryDiagnosis,
+              })}
             />
           </div>
         ) : null}
@@ -337,6 +597,10 @@ const DatosSalud = () => {
             value={textInputs.typeProsthesis}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.typeProsthesis && {
+              error: errors.textErrors.typeProsthesis,
+              helperText: errors.textErrors.typeProsthesis,
+            })}
           />
         </div>
       ) : null}
@@ -376,6 +640,10 @@ const DatosSalud = () => {
             value={textInputs.psychDiagnosis}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.psychDiagnosis && {
+              error: errors.textErrors.psychDiagnosis,
+              helperText: errors.textErrors.psychDiagnosis,
+            })}
           />
           <TextField
             name="psychMeds"
@@ -392,6 +660,10 @@ const DatosSalud = () => {
             value={textInputs.psychhospitalization}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.psychhospitalization && {
+              error: errors.textErrors.psychhospitalization,
+              helperText: errors.textErrors.psychhospitalization,
+            })}
           />
           <TextField
             name="psychhospitalizationDate"
@@ -428,6 +700,10 @@ const DatosSalud = () => {
             value={textInputs.hospitalizationReason}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.hospitalizationReason && {
+              error: errors.textErrors.hospitalizationReason,
+              helperText: errors.textErrors.hospitalizationReason,
+            })}
           />
           <TextField
             name="hospitalizationDate"
@@ -465,6 +741,10 @@ const DatosSalud = () => {
             value={textInputs.otherT}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.otherT && {
+              error: errors.textErrors.otherT,
+              helperText: errors.textErrors.otherT,
+            })}
           />
           <TextField
             name="otherTDiagnosis"
@@ -473,6 +753,10 @@ const DatosSalud = () => {
             value={textInputs.otherTDiagnosis}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.otherTDiagnosis && {
+              error: errors.textErrors.otherTDiagnosis,
+              helperText: errors.textErrors.otherTDiagnosis,
+            })}
           />
           <TextField
             name="otherTMedic"
@@ -481,6 +765,10 @@ const DatosSalud = () => {
             value={textInputs.otherTMedic}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.otherTMedic && {
+              error: errors.textErrors.otherTMedic,
+              helperText: errors.textErrors.otherTMedic,
+            })}
           />
           <TextField
             name="otherTNumber"
@@ -527,6 +815,10 @@ const DatosSalud = () => {
             value={textInputs.studiesDiagnostic}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.studiesDiagnostic && {
+              error: errors.textErrors.studiesDiagnostic,
+              helperText: errors.textErrors.studiesDiagnostic,
+            })}
           />
         </div>
       ) : null}
@@ -553,6 +845,10 @@ const DatosSalud = () => {
             value={textInputs.hereditaryDiseases}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.hereditaryDiseases && {
+              error: errors.textErrors.hereditaryDiseases,
+              helperText: errors.textErrors.hereditaryDiseases,
+            })}
           />
         </div>
       ) : null}
@@ -579,6 +875,10 @@ const DatosSalud = () => {
             value={textInputs.bloodTransReason}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.bloodTransReason && {
+              error: errors.textErrors.bloodTransReason,
+              helperText: errors.textErrors.bloodTransReason,
+            })}
           />
           <TextField
             name="bloodTransDate"
@@ -636,6 +936,10 @@ const DatosSalud = () => {
             value={textInputs.studiesSixMonthsD}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.studiesSixMonthsD && {
+              error: errors.textErrors.studiesSixMonthsD,
+              helperText: errors.textErrors.studiesSixMonthsD,
+            })}
           />
         </div>
       ) : null}
@@ -661,6 +965,10 @@ const DatosSalud = () => {
               value={textInputs.VHDetail}
               onChange={handleTextChange}
               onBlur={saveInLocalStorage}
+              {...(errors.textErrors.VHDetail && {
+                error: errors.textErrors.VHDetail,
+                helperText: errors.textErrors.VHDetail,
+              })}
             />
             <TextField
               name="VHDiagnostic"
@@ -688,14 +996,6 @@ const DatosSalud = () => {
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
       </RadioGroup>
-      <TextField
-        name="otherDiabetes"
-        label="Otras,¿Cuál/es?"
-        variant="outlined"
-        value={textInputs.otherDiabetes}
-        onChange={handleTextChange}
-        onBlur={saveInLocalStorage}
-      />
 
       <FormLabel component="legend">
         {" "}
@@ -720,6 +1020,10 @@ const DatosSalud = () => {
             value={textInputs.adictionsDetail}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.adictionsDetail && {
+              error: errors.textErrors.adictionsDetail,
+              helperText: errors.textErrors.adictionsDetail,
+            })}
           />
         </div>
       ) : null}
@@ -774,6 +1078,10 @@ const DatosSalud = () => {
             value={textInputs.eatingDisordersD}
             onChange={handleTextChange}
             onBlur={saveInLocalStorage}
+            {...(errors.textErrors.eatingDisordersD && {
+              error: errors.textErrors.eatingDisordersD,
+              helperText: errors.textErrors.eatingDisordersD,
+            })}
           />
         </div>
       )}
@@ -782,9 +1090,12 @@ const DatosSalud = () => {
       <TextField
         name="weight"
         variant="outlined"
-        type= "number"
+        type="number"
         value={textInputsNum.weight}
         InputProps={{
+          inputProps:{
+            min:0
+          },
           endAdornment: <InputAdornment position="start">Kg</InputAdornment>,
         }}
         onChange={handleTextNumberChange}
@@ -793,11 +1104,14 @@ const DatosSalud = () => {
       <FormLabel component="legend">18- Altura </FormLabel>
       <TextField
         name="height"
-        type= "number"
+        type="number"
         variant="outlined"
         value={textInputsNum.height}
         InputProps={{
-          endAdornment: <InputAdornment position="start">m</InputAdornment>,
+          inputProps:{
+            min:0
+          },
+          endAdornment: <InputAdornment position="start">cm</InputAdornment>,
         }}
         onChange={handleTextNumberChange}
         onBlur={saveInLocalStorage}
@@ -832,30 +1146,51 @@ const DatosSalud = () => {
       >
         <FormControlLabel value="No" control={<Radio />} label="No" />
         <FormControlLabel value="Si" control={<Radio />} label="Si" />
-        {<div></div>}
+        {radioInputs.otherPatRad === "Si" ? (
+          <div>
+            <TextField
+              name="otherPatD"
+              label="¿Cuál/es?"
+              variant="outlined"
+              value={textInputs.otherPatD}
+              onChange={handleTextChange}
+              onBlur={saveInLocalStorage}
+               {...(errors.textErrors.otherPatD && {
+              error: errors.textErrors.otherPatD,
+              helperText: errors.textErrors.otherPatD,
+            })}
+            />
+          </div>
+        ) : null}
       </RadioGroup>
       <TextField
-        name="otherPatD"
-        label="¿Cuál/es?"
+        name="formDate"
+        label="Fecha de Formulario"
         variant="outlined"
-        value={textInputs.otherPatD}
-        onChange={handleTextChange}
+        value={dateInputs.formDate}
+        type="date"
+        InputLabelProps={{ shrink: true }}
+        onChange={handleDate}
         onBlur={saveInLocalStorage}
       />
-
       <div>
         <Checkbox
           name="accept"
           color="primary"
-          value={checkInputs.accept}
+          checked={checkInputs.accept}
           inputProps={{ "aria-label": "secondary checkbox" }}
-          onChange={(e) =>
+          onChange={(e) =>{
             setcheckInputs({
               [e.target.name]: e.target.checked,
             })
+            setErrors({...errors,
+              checkErrors:{[e.target.name]: e.target.checked}
+            })
           }
-          onBlur={saveInLocalStorage}
+        }
+        onBlur={saveInLocalStorage}
         />
+
         <FormLabel component="legend">
           "Declaro bajo juramento que en la presente informé la totalidad de mis
           antecedentes de salud y/o de cada uno de los integrantes de mi grupo
@@ -867,7 +1202,7 @@ const DatosSalud = () => {
           institución de salud."
         </FormLabel>
       </div>
-    </>
+    </div>
   );
 };
 export default DatosSalud;

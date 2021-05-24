@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -7,11 +7,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import DatosTitular from './DatosTitular';
 import DatosSalud from './DatosSalud';
-import DatosFamiliares from './DatosFamiliares';
 import DatosEmpresa from "./DatosEmpresa"
 import DatosRevision from './DatosRevision';
 import supabase from "../../../supabase.config";
-
+import style from "./RegStepper.module.css"
+import swal from "sweetalert2"
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -54,18 +54,43 @@ export default function RegStepper() {
 const alltrue= (obj) => {
   let completeError = true;
   for (let error in obj) {
-    completeError = completeError && Object.values(obj[error])[0]
+    completeError = completeError && (typeof Object.values(obj[error])[0] !=="string")
 }
 return completeError}
 
   const handleNext = async() => {
-      
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-     
+    switch(activeStep.toString()){
+        case "0":
+          const errorsTitular = JSON.parse(localStorage.getItem("errorsTitular"))
+          alltrue(errorsTitular)?
+          setActiveStep((prevActiveStep) => prevActiveStep + 1):
+          new swal("Ups!", "Debes completar todos los campos")
+          break;
+          case "1":
+            const errorsEmpresa = JSON.parse(localStorage.getItem("errorsEmpresa"))
+            alltrue(errorsEmpresa)?
+            setActiveStep((prevActiveStep) => prevActiveStep + 1):
+            new swal("Ups!", "Debes completar todos los campos")
+          break;
+            case"2":
+            const errorsSalud = JSON.parse(localStorage.getItem("errorsSalud"))
+            
+          alltrue(errorsSalud)?
+          setActiveStep((prevActiveStep) => prevActiveStep + 1):
+          new swal("Ups!", "Debes completar todos los campos")
+          break;
+
+            default: break
+          }
+          // setActiveStep((prevActiveStep) => prevActiveStep + 1)
+
+
+    
+    
     if(activeStep === steps.length - 1 ){
       const datosTitular = JSON.parse(localStorage.getItem('datosTitular'));
       const datosEmpresa = JSON.parse(localStorage.getItem('datosEmpresa'));
-      console.log(activeStep)
+
       const { data:partner, error:errorPartner } = await supabase
       .from('partners')
       .insert([{ dni:datosTitular.dni,
@@ -80,7 +105,6 @@ return completeError}
                 email:datosTitular.email,
                 plan_id:8,
                 company_id:null,
-                medical_records_id:null,
                 gender:datosTitular.gender
       }])
       const { data:address, error:errorAddress } = await supabase
@@ -92,7 +116,9 @@ return completeError}
                   locality_id:datosTitular.locality.split('-')[0],
                   partner_dni:datosTitular.dni,
                   department:datosTitular.apartment
-      }])
+      }]) 
+      
+
       const { data:companies, error:errorCompanies } = await supabase
       .from('companies')
       .insert([{  business_name:datosEmpresa.bussines_name,
@@ -100,6 +126,8 @@ return completeError}
                   phone_number:datosEmpresa.company_phone,
                   email:datosEmpresa.company_email
       }])
+      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+      console.log("selalastra",errorCompanies) 
     }
   };
 
@@ -125,11 +153,11 @@ return completeError}
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Typography className={classes.instructions}>All steps completed</Typography>
+            <Typography className={classes.instructions}>Tu Formulario ha sido enviado!</Typography>
             <Button onClick={handleReset}>Reset</Button>
           </div>
         ) : (
-          <div>
+          <div classname= {style.btn}>
             <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
             <div>
               <Button
