@@ -55,80 +55,79 @@ const DatosRevision = () => {
           <h3>{datosDeclaration.completeName}</h3>
           <h4>{datosDeclaration.dni}</h4>
             {datosDeclaration.diabetes === "Si" ? (
-              <h4>Diabetes:{datosDeclaration.diabetesD}</h4>
+              <h4>Diabetes<br></br>{datosDeclaration.diabetesD}</h4>
             ) : null}
             {datosDeclaration.heart === "Si" ? (
-              <h4>Condiciones Cardíacas {datosDeclaration.heartD}</h4>
+              <h4>Condiciones Cardíacas<br></br> {datosDeclaration.heartD}</h4>
             ) : null}
          
             {datosDeclaration.hernia === "Si" ? (
-              <h4>Hernia {datosDeclaration.herniaD}</h4>
+              <h4>Hernia<br></br> {datosDeclaration.herniaD}</h4>
             ) : null}
       
             {datosDeclaration.allergies === "Si" ? (
-              <h4>Alergias {datosDeclaration.allergiesD}</h4>
+              <h4>Alergias <br></br>{datosDeclaration.allergiesD}</h4>
             ) : null}
            
             {datosDeclaration.seizures === "Si" ? (
-              <h4>Convulsiones{datosDeclaration.seizuresD}</h4>
+              <h4>Convulsiones <br></br>{datosDeclaration.seizuresD}</h4>
             ) : null}
            
             {datosDeclaration.asthma === "Si" ? (
-              <h4>Asma{datosDeclaration.asthmaD}</h4>
+              <h4>Asma <br></br>{datosDeclaration.asthmaD}</h4>
             ) : null}
         
             {datosDeclaration.sinusitis === "Si" ? (
-              <h4>Sinusitis, Adenoides, Otitis a repetición
-              Si
+              <h4>Sinusitis, Adenoides, Otitis a repetición<br></br>
               {datosDeclaration.sinusitisD}</h4>
             ) : null}
            
             {datosDeclaration.hypertension === "Si" ? (
-              <h4>Hipertensión {datosDeclaration.hypertensionD}</h4>
+              <h4>Hipertensión<br></br> {datosDeclaration.hypertensionD}</h4>
             ) : null}
            
             {datosDeclaration.hypotension === "Si" ? (
-              <h4>Hipotensión{datosDeclaration.hypotensionD}</h4>
+              <h4>Hipotensión<br></br>{datosDeclaration.hypotensionD}</h4>
             ) : null}
   
             {datosDeclaration.others === "Si" ? (
-              <h4>{datosDeclaration.othersD}</h4>
+              <h4>Otros<br></br>{datosDeclaration.othersD}</h4>
             ) : null}
             <Divider></Divider>
          
             {datosDeclaration.surgeryProt === "Si" ? (
-              <h4> Operaciones/Protesís
+              <h4> Operaciones/Protesís <br></br>
                 {datosDeclaration.surgeryProtD}</h4>
             ) : null}
             <Divider></Divider>
             
             {datosDeclaration.hearing === "Si" ? (
-              <h4> Dificultades Auditivas:{datosDeclaration.hearingD}</h4>
+              <h4> Dificultades Auditivas<br></br>{datosDeclaration.hearingD}</h4>
             ) : null}
            
             {datosDeclaration.visual === "Si" ? (
-              <h4>Dificultades visuales{datosDeclaration.visualD}</h4>
+              <h4>Dificultades visuales<br></br>{datosDeclaration.visualD}</h4>
             ) : null}
            
             {datosDeclaration.spine === "Si" ? (
-              <h4>Desviación de Columna{datosDeclaration.spineD}</h4>
+              <h4>Desviación de Columna<br></br>{datosDeclaration.spineD}</h4>
             ) : null}
             
             {datosDeclaration.fainting === "Si" ? (
-              <h4> Desmayos:{datosDeclaration.faintingD}</h4>
+              <h4> Desmayos<br></br>{datosDeclaration.faintingD}</h4>
             ) : null}
             <Divider></Divider>
       
             {datosDeclaration.psychological === "Si" ? (
-              <h4>Tratamiento Psicologico{datosDeclaration.psychologicalD}</h4>
+              <h4>Tratamiento Psicologico<br></br>{datosDeclaration.psychologicalD}</h4>
             ) : null}
             
             {datosDeclaration.psychiatric === "Si" ? (
-              <h4>Tratamiento psiquiátrico{datosDeclaration.psychiatricD}</h4>
+              <h4>Tratamiento psiquiátrico<br></br>{datosDeclaration.psychiatricD}</h4>
             ) : null}
             
             {datosDeclaration.medicines === "Si" ? (
-              <h4> Toma los siguientes medicamentos: {datosDeclaration.medicinesD}</h4>
+              <h4> Toma los siguientes medicamentos<br></br> {datosDeclaration.medicinesD}</h4>
             ) : null}
           </div>
         </div>

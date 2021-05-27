@@ -86,7 +86,6 @@ const Declaration = () => {
     saveInLocalStorage()
   };
   const handleCheck = (e) => {
-    console.log("entro aca",e.target.checked)
     setCheckInput({...checkInput,[e.target.name]:e.target.checked});
   };
 
@@ -137,7 +136,7 @@ const Declaration = () => {
       )
   }
   useEffect(() => {
-    const datosDeclaration = JSON.parse(
+    let datosDeclaration = JSON.parse(
       localStorage.getItem("datosDeclaration")
     );
     if(datosDeclaration){
@@ -185,9 +184,10 @@ const Declaration = () => {
       setInputNum({
         dni:datosDeclaration.dni
       })
+      setCheckInput({accept:datosDeclaration.accept})
+      validin(datosDeclaration.dni,"number")
+      validin(datosDeclaration.completeName,"string")
     }
-    validin(datosDeclaration.dni,"number")
-    validin(datosDeclaration.completeName,"string")
   },[]);
 
   return (
@@ -672,17 +672,19 @@ const Declaration = () => {
       <FormControlLabel
         className={styles.accept}
         name="accept"
+        checked={checkInput.accept&&checkInput.accept}
         control={<Checkbox required/>}
         onChange={handleCheck}
+        label="Acepto."
         onBlur={saveInLocalStorage}
-        label="Declaro bajo juramento que en la presente informé la totalidad de mis
+      />
+      <h4>"Declaro bajo juramento que en la presente informé la totalidad de mis
               antecedentes de salud no habiendo omitido dato alguno, estando por lo tanto
               INTEGRA facultado para resolver el vínculo en caso de falsedad en los
               términos del Dec. Reg. 1993/11, art. 9, inc. b, el que también declaro
               conocer. Autorizo expresamente a INTEGRA a requerir información médica
               referida a mi persona y/o grupo familiar a cualquier prestador y/o
-              institución de salud."
-      />
+              institución de salud."</h4>
     </div>
   );
 };

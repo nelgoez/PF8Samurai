@@ -57,7 +57,7 @@ const DatosTitular = () => {
     selectErrors: {
       marital_status: "",
       gender: "",
-      locality: "", //falta
+      locality: "", 
       state: "",
     },
     emailErrors: { email: "" },
@@ -460,7 +460,7 @@ const DatosTitular = () => {
               >
                 <option aria-label="None" value="" />
                 <option value={"Casado/a"}>Casado/a</option>
-                <option value={"Single"}>Single</option>
+                <option value={"Soltero/a"}>Soltero/a</option>
               </Select>
             </FormControl>
           </div>

@@ -75,12 +75,13 @@ return completeError}
             new swal("Ups!", "Debes completar todos los campos")
           break;
             case"2":
-          //   const errorsSalud = JSON.parse(localStorage.getItem("errorsSalud"))
-          //   console.log("salud",errorsSalud,alltrue(errorsSalud))
-          // alltrue(errorsSalud)?
+            const errorsDeclaration = JSON.parse(localStorage.getItem("errorsDeclaration"))
+            const finalcheck = JSON.parse(localStorage.getItem("datosDeclaration")).accept
+            const{completeName,dni}= errorsDeclaration
+            !completeName&&!dni&&finalcheck?
           setActiveStep((prevActiveStep) => prevActiveStep + 1)
-          // :
-          // new swal("Ups!", "Debes completar todos los campos")
+          :
+          new swal("Ups!", "Debes completar todos los campos")
           break;
 
             default: break
