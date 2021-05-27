@@ -17,8 +17,8 @@ const validator = (input,tipo) =>{
     }
 
     if (tipo==="text") {
-        // let size = Object.keys(input).length;
-        // let contador = 0;
+        let size = Object.keys(input).length;
+        let contador = 0;
         for (const key in input) {
             //comprobar si es un numero
             if(input[key]==="hide") ++contador

@@ -27,7 +27,6 @@ const DatosSalud = () => {
     bloodTransReason: "",
     studiesSixMonthsD: "",
     VHDetail: "",
-
     adictionsDetail: "",
     eatingDisordersD: "",
     otherPatD: "",

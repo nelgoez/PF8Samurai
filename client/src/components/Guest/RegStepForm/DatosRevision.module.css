@@ -3,7 +3,7 @@
     flex-direction:column;
     margin:20px;
     width: 80%;
-    height: 470px;
+    /* height: 470px; */
 }
 
 .datos{
@@ -24,7 +24,7 @@
 
 .datosTitular{
     display: flex;
-    flex-direction:column;
+    flex-direction:row;
 }
 .firstColumn{
     padding: 5px;
@@ -49,6 +49,8 @@
     margin-left: 10px;
     padding: 5px;
     padding: 10px;
+    background: aliceblue;
+    max-width: 40%;
 }
 .segmentos{
     margin-top: 5px;

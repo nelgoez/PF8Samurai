@@ -12,12 +12,14 @@ import DatosRevision from './DatosRevision';
 import supabase from "../../../supabase.config";
 import style from "./RegStepper.module.css"
 import swal from "sweetalert2"
+import Declaration from './Declaration';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
   backButton: {
     marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(5)
   },
   instructions: {
     marginTop: theme.spacing(1),
@@ -26,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ["Datos del Titular","Datos de la Empresa","Datos de Salud","Resumen",];
+  return ["Datos del Titular","Datos de la Empresa","Antecedentes de Salud","Resumen",];
 }
 
 function getStepContent(stepIndex) {
@@ -36,7 +38,7 @@ function getStepContent(stepIndex) {
     case 1:
       return <DatosEmpresa/> ;
     case 2:
-      return <DatosSalud/>;
+      return <Declaration/>;
     // case 3: 
     //   return <DatosFamiliares/>;
     case 3: 
@@ -73,11 +75,12 @@ return completeError}
             new swal("Ups!", "Debes completar todos los campos")
           break;
             case"2":
-            const errorsSalud = JSON.parse(localStorage.getItem("errorsSalud"))
-            
-          alltrue(errorsSalud)?
-          setActiveStep((prevActiveStep) => prevActiveStep + 1):
-          new swal("Ups!", "Debes completar todos los campos")
+          //   const errorsSalud = JSON.parse(localStorage.getItem("errorsSalud"))
+          //   console.log("salud",errorsSalud,alltrue(errorsSalud))
+          // alltrue(errorsSalud)?
+          setActiveStep((prevActiveStep) => prevActiveStep + 1)
+          // :
+          // new swal("Ups!", "Debes completar todos los campos")
           break;
 
             default: break

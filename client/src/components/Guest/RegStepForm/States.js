@@ -24,7 +24,7 @@
 // hospitalizationnDate:"",
 // medicalStudiesDate:"",
 // bloodTransDate:"",
-// treatmentDate:""
+// treatmentDate:"" /// cinco
 
 // Estados input 
 // completeName: ""
@@ -52,4 +52,4 @@
 // eatingDisordersD: ""
 // weight: ""
 // height: ""
-// otherPatD: ""
+// otherPatD: "" // 5 textos

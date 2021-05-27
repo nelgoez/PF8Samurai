@@ -342,9 +342,9 @@ const DatosTitular = () => {
                 onBlur={saveInLocalStorage}
               >
                 <option aria-label="None" value="" />
-                <option value={"male"}>Masculino</option>
-                <option value={"female"}>Femenino</option>
-                <option value={"other"}>Otro</option>
+                <option value={"Masculino"}>Masculino</option>
+                <option value={"Femenino"}>Femenino</option>
+                <option value={"Otro"}>Otro</option>
               </Select>
             </FormControl>
           </div>
@@ -459,8 +459,8 @@ const DatosTitular = () => {
                 onBlur={saveInLocalStorage}
               >
                 <option aria-label="None" value="" />
-                <option value={"married"}>Casado/a</option>
-                <option value={"single"}>Soltero/a</option>
+                <option value={"Casado/a"}>Casado/a</option>
+                <option value={"Single"}>Single</option>
               </Select>
             </FormControl>
           </div>
