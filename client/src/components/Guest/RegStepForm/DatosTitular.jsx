@@ -524,8 +524,21 @@ const DatosTitular = () => {
         </div>
         <div className={styles.input}>
           <TextField
+            id="floor-input"
+            label="Piso"
+            type="text"
+            name="floor"
+            autoComplete="off"
+            value={apartmentInput.floor}
+            variant="outlined"
+            onChange={(e) => setApartmentInput({[e.target.name]: e.target.value })}
+            onBlur={saveInLocalStorage}
+          />
+        </div>
+        <div className={styles.input}>
+          <TextField
             id="apartment-input"
-            label="Piso/Depto"
+            label="Depto"
             type="text"
             name="apartment"
             autoComplete="off"

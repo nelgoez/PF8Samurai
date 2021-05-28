@@ -54,9 +54,9 @@ const Declaration = () => {
     psychiatricD: "",
     medicinesD: "",
   });
-  const [inputNum, setInputNum] = useState({ dni: "" });
+  // const [inputNum, setInputNum] = useState({ dniDeclaration: "" });
   const [checkInput, setCheckInput] = useState({accept:""});
-  const [errors, setErrors] = useState({ completeName: "", dni: "" });
+  const [errors, setErrors] = useState({ completeName: "", dniDeclaration: "" });
   const handleRad = (e) => {
     let { name, value } = e.target;
     setInputsRad({
@@ -79,12 +79,12 @@ const Declaration = () => {
       [name]: value,
     });
   };
-  const handleNum = (e) => {
-    let { name, value } = e.target;
-    validin(value,"number");
-    setInputNum({ [name]: value });
-    saveInLocalStorage()
-  };
+  // const handleNum = (e) => {
+  //   let { name, value } = e.target;
+  //   validin(value,"number");
+  //   setInputNum({ [name]: value });
+  //   saveInLocalStorage()
+  // };
   const handleCheck = (e) => {
     setCheckInput({...checkInput,[e.target.name]:e.target.checked});
   };
@@ -92,19 +92,19 @@ const Declaration = () => {
   const validin = (input,type) => {
     const ex_dni = /^\d{8}(?:[-\s]\d{4})?$/;
     const ex_name = /^[a-z ,.'-]+$/i;
-    if (type === "number") {
-      if (!ex_dni.test(Number(input))){
-      console.log("entroaNumber error",!ex_dni.test(Number(input)))
-        setErrors({
-          ...errors,
-          dni: "Dni erroneo, formato no válido",
-        })}else{
-          setErrors({
-            ...errors,
-            dni: "",
-          })
-        }
-    }
+    // if (type === "number") {
+    //   if (!ex_dni.test(Number(input))){
+    //   console.log("entroaNumber error",!ex_dni.test(Number(input)))
+    //     setErrors({
+    //       ...errors,
+    //       dniDeclarationi: "Dni erroneo, formato no válido",
+    //     })}else{
+    //       setErrors({
+    //         ...errors,
+    //         dniDeclaration: "",
+    //       })
+    //     }
+    // }
     if (type === "string") {
       if (!ex_name.test(input)){
       setErrors({
@@ -126,7 +126,7 @@ const Declaration = () => {
       JSON.stringify({
         ...inputsRad,
         ...inputsText,
-        ...inputNum,
+        // ...inputNum,
         ...checkInput
       }))
 
@@ -181,11 +181,11 @@ const Declaration = () => {
         psychiatricD: datosDeclaration.psychiatricD,
         medicinesD: datosDeclaration.medicinesD
       })
-      setInputNum({
-        dni:datosDeclaration.dni
-      })
+      // setInputNum({
+      //   dniDeclaration:datosDeclaration.dniDeclaration
+      // })
       setCheckInput({accept:datosDeclaration.accept})
-      validin(datosDeclaration.dni,"number")
+      validin(datosDeclaration.dniDeclaration,"number")
       validin(datosDeclaration.completeName,"string")
     }
   },[]);
@@ -204,21 +204,21 @@ const Declaration = () => {
           helperText: errors.completeName,
         })}
       ></TextField>
-      <TextField
-        name="dni"
+      {/* <TextField
+        name="dniDeclaration"
         type="number"
-        value={inputNum.dni}
+        value={inputNum.dniDeclaration}
         onChange={handleNum}
         label="DNI"
         inputProps={{
           min: 0,
         }}
         onBlur={saveInLocalStorage}
-        {...(errors.dni && {
-          error: errors.dni,
-          helperText: errors.dni,
+        {...(errors.dniDeclaration && {
+          error: errors.dniDeclaration,
+          helperText: errors.dniDeclaration,
         })}
-      ></TextField>
+      ></TextField> */}
       <FormLabel>
         <h4 className={styles.title}>
           ¿Padece alguna de las siguientes enfermedades?
@@ -669,6 +669,8 @@ const Declaration = () => {
           variant="outlined"
         ></TextField>
       ) : null}
+      <div className={styles.declaration}>
+
       <FormControlLabel
         className={styles.accept}
         name="accept"
@@ -678,13 +680,15 @@ const Declaration = () => {
         label="Acepto."
         onBlur={saveInLocalStorage}
       />
-      <h4>"Declaro bajo juramento que en la presente informé la totalidad de mis
+      <h4 className={styles.declaration}>"Declaro bajo juramento que en la presente informé la totalidad de mis
               antecedentes de salud no habiendo omitido dato alguno, estando por lo tanto
               INTEGRA facultado para resolver el vínculo en caso de falsedad en los
               términos del Dec. Reg. 1993/11, art. 9, inc. b, el que también declaro
               conocer. Autorizo expresamente a INTEGRA a requerir información médica
               referida a mi persona y/o grupo familiar a cualquier prestador y/o
               institución de salud."</h4>
+
+      </div>
     </div>
   );
 };

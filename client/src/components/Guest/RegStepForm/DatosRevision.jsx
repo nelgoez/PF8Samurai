@@ -32,7 +32,8 @@ const DatosRevision = () => {
               <h4>Fecha de nacimiento: {datosTitular.birth_date}</h4>
               <h4>Calle: {datosTitular.street_name}</h4>
               <h4>Numero: {datosTitular.number}</h4>
-              <h4>Piso/Depto: {datosTitular.apartment}</h4>
+              {datosTitular.floor? <h4>Piso: {datosTitular.floor}</h4>:null}
+              {datosTitular.apartment? <h4>Departamento: {datosTitular.apartment}</h4>:null}
               <h4>Provincia: {datosTitular.state.split("-")[1]}</h4>
               <h4>Localidad: {datosTitular.locality.split("-")[1]}</h4>
             </div>
@@ -47,13 +48,14 @@ const DatosRevision = () => {
               </h4>
               <h4>Teléfono:{datosEmpresa.company_phone}</h4>
               <h4>E-mail:{datosEmpresa.company_email}</h4>
+              <h4>CUIT:{datosEmpresa.company_cuit}</h4>
             </div>
           </div>
 
           <div ref={ref} id="Declaration" className={styles.salud}>
           <h2>Declaracion Jurada de Salud</h2>
           <h3>{datosDeclaration.completeName}</h3>
-          <h4>{datosDeclaration.dni}</h4>
+          <h4>{datosTitular.dni}</h4>
             {datosDeclaration.diabetes === "Si" ? (
               <h4>Diabetes<br></br>{datosDeclaration.diabetesD}</h4>
             ) : null}
