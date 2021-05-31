@@ -8,11 +8,41 @@ import FormControl from "@material-ui/core/FormControl";
 import styles from "./DatosTitular.module.css";
 import validator from "./Validator";
 import useQuery from "../../../hooks/querys";
+import supabase from "../../../supabase.config";
 
 const DatosTitular = () => {
-  const allStates = useSelector((state) => state.plans.allStates);
-  const allLocalities = useSelector((state) => state.plans.allLocalities);
-  const dispatch = useDispatch();
+  const [allStates,setAllStates] = useState([])
+  const [allLocalities,setAllLocalities] = useState([]);
+
+  const provincias= async()=>{
+  const {data: Prov ,error: errorProv} = await supabase
+        .from("states")
+        .select()
+        setAllStates(Prov)
+  }
+  const localidades= async(provincia)=>{
+    let idprov = provincia.split("-")[0]
+    console.log(idprov)
+    const {data: local,error: errorlocal}= await supabase
+        .from ("localities")
+        .select( "state_id,name")
+        .eq("state_id",Number(idprov))
+        console.log(errorlocal)
+        setAllLocalities(local)
+        console.log(local)
+
+    return local
+  }
+        
+      
+     useEffect(()=>{
+       provincias()
+     },[]) 
+
+
+
+
+
   const [textInputs, setTextInputs] = useState({
     first_name: "",
     last_name: "",
@@ -267,26 +297,22 @@ const DatosTitular = () => {
     });
   };
 
-  useEffect(() => {
-    dispatch(getStates());
-    dispatch(getLocalities());
-  }, []);
 
-  useEffect(() => {
-    //console.log('useEffect '+input.state)
-    dispatch(getLocalities(selectInputs.state));
+
+  useEffect(() => { 
+    localidades(selectInputs.state)
   }, [selectInputs.state]);
 
   const states = allStates.map((s) => {
     return <option value={`${s.id}-${s.name}`}>{s.name}</option>;
   });
   //1-buenos aires
-  const localities = allLocalities
+  const localities = allLocalities&& allLocalities
     .filter((l) => l.state_id == selectInputs.state.split("-")[0])
     .map((l) => {
       return <option value={`${l.id}-${l.name}`}>{l.name}</option>;
     });
-  console.log("localities", localities);
+  // console.log("localities", localities);
   return (
     <div className={styles.form}>
       <div className={styles.personalData}>

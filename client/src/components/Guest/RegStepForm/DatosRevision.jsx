@@ -1,15 +1,33 @@
 import React from "react";
 import * as styles from "./DatosRevision.module.css";
 import Pdf from "react-to-pdf";
-import { Divider } from "@material-ui/core";
+import { Divider,Button, makeStyles } from "@material-ui/core";
 import Declaration from "./Declaration";
 const ref = React.createRef();
 
+const useStyles = makeStyles(()=>({
+  popupBtn:{
+    color: '#fafafa',
+    width: "fit-content",
+    marginLeft: "40px",
+    border: '3px solid #2c7f7b',
+    borderRadius:'5px',
+    backgroundColor:'#2c7f7b',
+    fontWeight:'bold',
+    fontSize:'15px',
+    '&:hover':{
+        backgroundColor:'#fafafa',
+        color:'#2c7f7b'
+    }
+}
+}))
 const DatosRevision = () => {
   const datosTitular = JSON.parse(localStorage.getItem("datosTitular"));
   const datosEmpresa = JSON.parse(localStorage.getItem("datosEmpresa"));
   const datosDeclaration = JSON.parse(localStorage.getItem("datosDeclaration"));
-
+  
+  const classes= useStyles()
+  
   return (
     <div className={styles.form}>
       <div className={styles.title}>
@@ -136,7 +154,12 @@ const DatosRevision = () => {
       </div>
 
       <Pdf targetRef={ref} filename={`Partner-${datosDeclaration.dni}`}>
-        {({ toPdf }) => <button onClick={toPdf}> probando ese pdf</button>}
+        {({ toPdf }) =>
+           <Button className={classes.popupBtn}variant="contained" onClick={toPdf}>
+                Descargar en Pdf 
+         </Button>
+         }
+        {/* // <button onClick={}> probando ese pdf</button>} */}
       </Pdf>
     </div>
   );

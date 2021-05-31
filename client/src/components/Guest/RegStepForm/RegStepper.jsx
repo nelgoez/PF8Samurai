@@ -20,11 +20,37 @@ const useStyles = makeStyles((theme) => ({
   backButton: {
     marginRight: theme.spacing(1),
     marginLeft: theme.spacing(5),
-  },
+    color: '#fafafa',
+    width: "fit-content",
+    marginLeft: "40px",
+    border: '3px solid #2c7f7b',
+    borderRadius:'5px',
+    backgroundColor:'#2c7f7b',
+    fontWeight:'bold',
+    fontSize:'15px',
+    '&:hover':{
+        backgroundColor:'#fafafa',
+        color:'#2c7f7b'
+    }
+      },
   instructions: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   },
+  popupBtn:{
+    color: '#fafafa',
+    width: "fit-content",
+    marginLeft: "40px",
+    border: '3px solid #2c7f7b',
+    borderRadius:'5px',
+    backgroundColor:'#2c7f7b',
+    fontWeight:'bold',
+    fontSize:'15px',
+    '&:hover':{
+        backgroundColor:'#fafafa',
+        color:'#2c7f7b'
+    }
+  }
 }));
 
 function getSteps() {
@@ -237,7 +263,7 @@ export default function RegStepper() {
               >
                 Back
               </Button>
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Button className={classes.popupBtn}variant="contained" color="primary" onClick={handleNext}>
                 {activeStep === 3 ? "Finish" : "Next"}
               </Button>
             </div>
